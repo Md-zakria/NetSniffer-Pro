@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.env
+venv/
+env/
+
+# Logs
+sniffer_log.txt
+*.log
+
+# Windows shortcuts
+*.lnk
+
+# IDE
+.vscode/
+.idea/
