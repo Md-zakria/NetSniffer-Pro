@@ -61,7 +61,7 @@ The entire application lives in a single 1,784-line file (`network_sniffer.py`),
 
 <div align="center">
 
-https://github.com/Md-zakria/NetSniffer-Pro/assets/demo-placeholder
+https://github.com/user-attachments/assets/4b1a230a-bac5-4101-9bd5-606624f378be
 
 </div>
 
