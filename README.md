@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Dependencies](https://img.shields.io/badge/Dependencies-Zero%20(stdlib%20only)-brightgreen.svg)]()
 
-*A Wireshark-inspired desktop packet sniffer with a modern dark UI, real-time capture, and protocol-aware analysis — built entirely on Python's standard library.*
+*A Wireshark-inspired desktop packet sniffer with a modern dark UI, real-time capture, and protocol-aware analysis, built entirely on Python's standard library.*
 
 [Features](#features) • [Screenshots](#screenshots) • [Installation](#installation) • [Usage](#usage) • [Architecture](#architecture) • [Demo](#demo-video)
 
@@ -19,29 +19,27 @@
 
 ## Overview
 
-**NetSniffer Pro** is a real-time network packet capture and analysis tool with a polished, Wireshark-style interface — built using nothing but Python's standard library (`tkinter`, `socket`, `struct`, `threading`). It captures live traffic at the raw socket level, parses Ethernet/IPv4/TCP/UDP/ICMP headers byte-by-byte, and presents the results through a responsive, multi-page desktop application.
+**NetSniffer Pro** is a real-time network packet capture and analysis tool with a polished, Wireshark-style interface, built using nothing but Python's standard library (`tkinter`, `socket`, `struct`, `threading`). It captures live traffic at the raw socket level, parses Ethernet/IPv4/TCP/UDP/ICMP headers byte-by-byte, and presents the results through a responsive, multi-page desktop application.
 
-The entire application lives in a single 1,784-line file (`network_sniffer.py`), demonstrating that a production-quality networking tool doesn't require third-party GUI frameworks or packet libraries like Scapy — just a solid understanding of protocol structures and the standard library.
+The entire application lives in a single 1,784-line file (`network_sniffer.py`), demonstrating that a production-quality networking tool doesn't require third-party GUI frameworks or packet libraries like Scapy, just a solid understanding of protocol structures and the standard library.
 
 > **Note:** Raw socket capture requires elevated privileges. Run as Administrator on Windows or with `sudo` on Linux.
 
 ## Features
 
-- **Modern Dark UI** — Custom Canvas-based widgets (rounded buttons, animated status indicators) on a carefully designed dark color palette
-- **Live Packet Capture** — Background-threaded capture engine keeps the UI fully responsive while sniffing traffic in real time
-- **Deep Protocol Parsing** — Manual byte-level parsing of Ethernet, IPv4, TCP, UDP, and ICMP headers (no third-party packet libraries)
-- **Protocol-Colored Table** — Packets are color-coded by protocol (TCP, UDP, ICMP, HTTP, HTTPS, DNS, ARP) for instant visual triage
-- **Wireshark-Style Hex Viewer** — Byte-accurate hex dump with offset markers and side-by-side ASCII preview, syntax-highlighted by byte value
-- **8 Dedicated Pages** — Dashboard, Packets, Statistics, Connections, Logs, Export, Settings, and About
-- **Live Search & Filtering** — Full-text search across all packet fields plus protocol filtering (TCP / UDP / ICMP / All)
-- **Multi-Format Export** — Export captures to CSV, JSON, or per-packet TXT reports
-- **Real-Time Statistics** — Auto-computed protocol distribution, top talkers, and connection aggregation (top 300 5-tuples)
-- **Smart Privilege Handling** — Detects admin/root status and offers a one-click UAC relaunch on Windows
-- **Zero External Dependencies** — Runs on a stock Python install; no pip packages required
+- **Modern Dark UI:** Custom Canvas-based widgets (rounded buttons, animated status indicators) on a carefully designed dark color palette
+- **Live Packet Capture:** Background-threaded capture engine keeps the UI fully responsive while sniffing traffic in real time
+- **Deep Protocol Parsing:** Manual byte-level parsing of Ethernet, IPv4, TCP, UDP, and ICMP headers (no third-party packet libraries)
+- **Protocol-Colored Table:** Packets are color-coded by protocol (TCP, UDP, ICMP, HTTP, HTTPS, DNS, ARP) for instant visual triage
+- **Wireshark-Style Hex Viewer:** Byte-accurate hex dump with offset markers and side-by-side ASCII preview, syntax-highlighted by byte value
+- **8 Dedicated Pages:** Dashboard, Packets, Statistics, Connections, Logs, Export, Settings, and About
+- **Live Search & Filtering:** Full-text search across all packet fields plus protocol filtering (TCP / UDP / ICMP / All)
+- **Multi-Format Export:** Export captures to CSV, JSON, or per-packet TXT reports
+- **Real-Time Statistics:** Auto-computed protocol distribution, top talkers, and connection aggregation (top 300 5-tuples)
+- **Smart Privilege Handling:** Detects admin/root status and offers a one-click UAC relaunch on Windows
+- **Zero External Dependencies:** Runs on a stock Python install; no pip packages required
 
 ## Screenshots
-
-> *Add your screenshots below once captured — see the [Media Guide](#-adding-screenshots--demo-video) section for exact steps.*
 
 <div align="center">
 
@@ -57,8 +55,6 @@ The entire application lives in a single 1,784-line file (`network_sniffer.py`),
 
 ## Demo Video
 
-> *Embed your demo clip here once recorded — GitHub renders an inline player automatically once the video is committed to the repo (see guide below).*
-
 <div align="center">
 
 https://github.com/user-attachments/assets/4b1a230a-bac5-4101-9bd5-606624f378be
@@ -71,38 +67,38 @@ NetSniffer Pro follows a clean 6-layer single-file architecture:
 
 ```
 ┌─────────────────────────────────────────────────┐
-│   LAYER 6 — APPLICATION  (NetworkSnifferGUI)    │
+│   LAYER 6: APPLICATION  (NetworkSnifferGUI)    │
 │   8 pages, toolbar, header, statusbar, menus    │
 ├─────────────────────────────────────────────────┤
-│   LAYER 5 — WIDGET LIBRARY                      │
+│   LAYER 5: WIDGET LIBRARY                      │
 │   ModernButton · PulseDot · Separator           │
 │   Sidebar · PacketTable · DetailsPanel          │
 │   HexViewer                                     │
 ├─────────────────────────────────────────────────┤
-│   LAYER 4 — THREAD BRIDGE                       │
+│   LAYER 4: THREAD BRIDGE                       │
 │   CaptureWorker (Thread) + queue.Queue          │
 ├─────────────────────────────────────────────────┤
-│   LAYER 3 — PROTOCOL PARSERS                    │
+│   LAYER 3: PROTOCOL PARSERS                    │
 │   Ethernet · IPv4 · TCP · UDP · ICMP            │
 │   build_packet_record · open/close socket       │
 ├─────────────────────────────────────────────────┤
-│   LAYER 2 — UTILITIES                           │
+│   LAYER 2: UTILITIES                           │
 │   mac_addr · ipv4_addr · payload_preview        │
 │   payload_hex_dump · get_capture_ip             │
 ├─────────────────────────────────────────────────┤
-│   LAYER 1 — THEME + CONSTANTS                   │
+│   LAYER 1: THEME + CONSTANTS                   │
 │   T · PROTO_ROW_BG · PROTO_FG                  │
 └─────────────────────────────────────────────────┘
 ```
 
-**Data flow:** a raw socket feeds a background `CaptureWorker` thread, which parses each packet and pushes structured records through a thread-safe `queue.Queue`. The GUI polls this queue every 100ms and updates the packet table, details panel, hex viewer, statistics, and status indicators in real time — keeping capture and rendering fully decoupled.
+**Data flow:** a raw socket feeds a background `CaptureWorker` thread, which parses each packet and pushes structured records through a thread-safe `queue.Queue`. The GUI polls this queue every 100ms and updates the packet table, details panel, hex viewer, statistics, and status indicators in real time, keeping capture and rendering fully decoupled.
 
 | Component | Technology |
 |---|---|
 | Language | Python 3.14 |
 | GUI Framework | Tkinter (stdlib) |
 | Concurrency | `threading.Thread` + `queue.Queue` |
-| Packet Capture | Raw sockets (`SOCK_RAW`) — `AF_INET`/`IP_HDRINCL` on Windows, `AF_PACKET` on Linux |
+| Packet Capture | Raw sockets (`SOCK_RAW`); `AF_INET`/`IP_HDRINCL` on Windows, `AF_PACKET` on Linux |
 | Parsing | Manual `struct.unpack` on Ethernet/IPv4/TCP/UDP/ICMP headers |
 
 ## Requirements
@@ -110,7 +106,7 @@ NetSniffer Pro follows a clean 6-layer single-file architecture:
 - Python 3.10+ (developed and tested on Python 3.14)
 - **Windows:** Administrator privileges (the app offers an automatic UAC relaunch)
 - **Linux:** root privileges (run with `sudo`)
-- No external packages required — built entirely on the standard library
+- No external packages required; built entirely on the standard library
 
 ## Installation
 
@@ -119,7 +115,7 @@ NetSniffer Pro follows a clean 6-layer single-file architecture:
 git clone https://github.com/Md-zakria/NetSniffer-Pro.git
 cd NetSniffer-Pro
 
-# No pip install needed — stdlib only
+# No pip install needed, stdlib only
 ```
 
 ## Usage
@@ -136,7 +132,7 @@ sudo python3 network_sniffer.py
 ```
 
 ### Quick Start
-1. Launch the app — it opens on the **Packets** page by default
+1. Launch the app. It opens on the **Packets** page by default
 2. (Optional) Set a protocol filter (TCP / UDP / ICMP) or a max packet cap in the toolbar
 3. Click **▶ Start** to begin live capture
 4. Select any row to inspect its full header breakdown in the **Details Panel** and raw bytes in the **Hex Viewer**
@@ -161,7 +157,7 @@ NetSniffer-Pro/
 - No `.pcap` import/export support
 - No manual network interface selection
 - No live charts (Statistics page is table-based)
-- Read-only sniffer — no packet injection, modification, or TLS decryption
+- Read-only sniffer: no packet injection, modification, or TLS decryption
 
 ## Roadmap
 
@@ -177,7 +173,7 @@ Contributions, issues, and feature requests are welcome. Feel free to open an is
 
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Author
 
